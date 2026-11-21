@@ -125,6 +125,7 @@ a { color: #93c5fd; }
 
 <div id="questionCard" class="card hidden">
   <h2 id="questionTitle">Diagnostic Question</h2>
+  <p id="progressText">Question 1</p>
   <p id="questionText"></p>
 
   <button onclick="answerQuestion(true)">Yes</button>
@@ -214,6 +215,7 @@ const diagnostics = {
 };
 
 let currentNode = null;
+let questionNumber = 1;
 
 function startTroubleshooting() {
   const problem = document.getElementById("problem").value;
@@ -224,6 +226,7 @@ function startTroubleshooting() {
   }
 
   currentNode = diagnostics[problem];
+  questionNumber = 1;
 
   document.getElementById("resultCard")
     .classList.add("hidden");
@@ -239,14 +242,15 @@ function showQuestion() {
 
   document.getElementById("questionCard")
     .classList.remove("hidden");
-
+document.getElementById("progressText").textContent =
+  "Question " + questionNumber;
   document.getElementById("questionText").textContent =
     currentNode.question;
 }
 
 function answerQuestion(answer) {
   currentNode = answer ? currentNode.yes : currentNode.no;
-
+questionNumber++;
   if (currentNode.result) {
     showResult(currentNode.result);
   } else {
