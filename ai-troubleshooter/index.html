@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Troubleshooting Assistant</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1120;
+  color: #e5eaf3;
+  line-height: 1.6;
+}
+
+header {
+  background: #111c30;
+  text-align: center;
+  padding: 35px 20px;
+  border-bottom: 1px solid #334155;
+}
+
+h1 { margin-bottom: 5px; }
+h2 { color: #60a5fa; }
+
+main {
+  max-width: 850px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.card {
+  background: #172238;
+  padding: 28px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  margin-bottom: 20px;
+}
+
+select, button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 12px;
+}
+
+select {
+  background: #0b1120;
+  color: white;
+  border: 1px solid #64748b;
+}
+
+button {
+  background: #60a5fa;
+  color: #08111f;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover { background: #93c5fd; }
+
+.secondary {
+  background: #334155;
+  color: white;
+}
+
+.hidden { display: none; }
+
+#result {
+  border-left: 4px solid #60a5fa;
+  padding: 15px;
+  background: #0b1120;
+  border-radius: 6px;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #94a3b8;
+}
+
+a { color: #93c5fd; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>IT Troubleshooting Assistant</h1>
+  <p>Interactive Computer & Network Diagnostics</p>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>Welcome</h2>
+  <p>
+    This application helps users identify common
+    computer and network problems through guided
+    troubleshooting questions.
+  </p>
+  <p>
+    Select a problem category to begin.
+  </p>
+
+  <label for="problem">Choose a problem:</label>
+  <select id="problem">
+    <option value="">-- Select an issue --</option>
+    <option value="internet">Internet Connection Issues</option>
+    <option value="slow">Slow Computer Performance</option>
+    <option value="startup">Computer Won't Start</option>
+    <option value="software">Software Crashing</option>
+  </select>
+
+  <button onclick="startTroubleshooting()">
+    Start Troubleshooting
+  </button>
+</div>
+
+<div id="questionCard" class="card hidden">
+  <h2 id="questionTitle">Diagnostic Question</h2>
+  <p id="questionText"></p>
+
+  <button onclick="answerQuestion(true)">Yes</button>
+  <button class="secondary" onclick="answerQuestion(false)">
+    No
+  </button>
+</div>
+
+<div id="resultCard" class="card hidden">
+  <h2>Diagnostic Results</h2>
+  <div id="result"></div>
+
+  <button onclick="resetApp()">Start Over</button>
+</div>
+
+<div class="card">
+  <h2>About This Project</h2>
+  <p>
+    This project was developed using HTML, CSS,
+    and JavaScript with assistance from ChatGPT
+    for planning, code generation, and debugging.
+  </p>
+  <p>
+    The diagnostic system uses rule-based decision
+    logic to recommend troubleshooting steps.
+    It does not use a live AI model.
+  </p>
+</div>
+
+<p>
+  <a href="../index.html">Back to Portfolio</a>
+</p>
+
+</main>
+
+<footer>
+  <p>© 2026 Ayden Manuel | IT Troubleshooting Assistant</p>
+</footer>
+
+<script>
+const diagnostics = {
+  internet: {
+    question: "Are other devices connected to the internet?",
+    yes: {
+      question: "Is your computer connected to Wi-Fi or Ethernet?",
+      yes: {
+        result: "Try restarting your network adapter, checking your IP configuration, and testing another website."
+      },
+      no: {
+        result: "Connect to your Wi-Fi network or plug in an Ethernet cable. Check that airplane mode is disabled."
+      }
+    },
+    no: {
+      result: "Restart your modem and router. Check for an ISP outage and inspect the network cables."
+    }
+  },
+
+  slow: {
+    question: "Is your computer slow even when no programs are open?",
+    yes: {
+      result: "Check Task Manager for high CPU, memory, or disk usage. Run a malware scan and check available storage."
+    },
+    no: {
+      result: "Identify which applications cause slowdowns. Update or reinstall the affected software and close unnecessary background programs."
+    }
+  },
+
+  startup: {
+    question: "Does the computer show any lights or fan activity?",
+    yes: {
+      result: "Check the monitor connection and look for startup error messages. Disconnect unnecessary peripherals and retry."
+    },
+    no: {
+      result: "Check the power cable, outlet, power supply switch, and laptop charger. Seek professional repair if power is still unavailable."
+    }
+  },
+
+  software: {
+    question: "Does the software crash immediately after opening?",
+    yes: {
+      result: "Restart the computer, install software updates, and check application compatibility. Try reinstalling the program."
+    },
+    no: {
+      result: "Check when the crash occurs, monitor system resource usage, and review application error logs."
+    }
+  }
+};
+
+let currentNode = null;
+
+function startTroubleshooting() {
+  const problem = document.getElementById("problem").value;
+
+  if (!problem) {
+    alert("Please select a problem category.");
+    return;
+  }
+
+  currentNode = diagnostics[problem];
+
+  document.getElementById("resultCard")
+    .classList.add("hidden");
+
+  showQuestion();
+}
+
+function showQuestion() {
+  if (currentNode.result) {
+    showResult(currentNode.result);
+    return;
+  }
+
+  document.getElementById("questionCard")
+    .classList.remove("hidden");
+
+  document.getElementById("questionText").textContent =
+    currentNode.question;
+}
+
+function answerQuestion(answer) {
+  currentNode = answer ? currentNode.yes : currentNode.no;
+
+  if (currentNode.result) {
+    showResult(currentNode.result);
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult(message) {
+  document.getElementById("questionCard")
+    .classList.add("hidden");
+
+  document.getElementById("resultCard")
+    .classList.remove("hidden");
+
+  document.getElementById("result").textContent = message;
+}
+
+function resetApp() {
+  currentNode = null;
+
+  document.getElementById("problem").value = "";
+
+  document.getElementById("questionCard")
+    .classList.add("hidden");
+
+  document.getElementById("resultCard")
+    .classList.add("hidden");
+}
+</script>
+
+</body>
+</html>
