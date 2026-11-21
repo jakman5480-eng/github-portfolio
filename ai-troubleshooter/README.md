@@ -152,6 +152,15 @@ Potential future improvements include:
 - Troubleshooting history
 - Improved accessibility
 
+## Screenshots
+
+### Application Homepage
+
+![IT Troubleshooting Assistant Homepage](homepage.png)
+
+### Diagnostic Demonstration
+
+![IT Troubleshooting Assistant Diagnostic](diagnostic.png)
 ## Developer
 
 Ayden Manuel
