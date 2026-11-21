@@ -159,6 +159,24 @@ project overview, features, installation
 instructions, usage guide, testing information,
 and future enhancements.
 
+## Interaction 10: Screenshot Documentation
+
+**Prompt/Request:**
+Shared a screenshot of the GitHub README to verify
+that the application screenshots displayed correctly.
+
+**AI Response Summary:**
+ChatGPT reviewed the screenshot and confirmed
+that the homepage image was rendering correctly
+inside the README documentation.
+
+**Student Modifications:**
+Uploaded homepage.png and diagnostic.png to GitHub
+and added Markdown image references to README.md.
+
+**Implementation Result:**
+Successfully displayed the application homepage
+screenshot in the project documentation.
 **Student Modifications:**
 Created README.md and committed it to GitHub.
 
